@@ -11,7 +11,10 @@ defmodule ZipperList.Mixfile do
      description: description(),
      homepage_url: "https://github.com/bbugh/zipper_list",
      source_url: "https://github.com/bbugh/zipper_list",
-     default_task: "test"]
+     default_task: "test",
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
+   ]
   end
 
   # Configuration for the OTP application
@@ -57,8 +60,9 @@ defmodule ZipperList.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:credo, "~> 0.4", only: [:dev, :test]},
+      {:credo, "~> 0.4", only: :dev},
       {:ex_guard, "~> 1.1.1", only: :dev},
+      {:excoveralls, "~> 0.5", only: :test},
       {:ex_doc, "~> 0.12", only: :dev}
     ]
   end
