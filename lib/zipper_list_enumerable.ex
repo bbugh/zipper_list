@@ -15,7 +15,7 @@ defimpl Enumerable, for: ZipperList do
 
   ## Examples
 
-      iex> Enum.member?(%ZipperList{left: [1, 3, 5], right: [2, 1]}, 5)
+      iex> Enum.member?(%ZipperList{left: [1, 3, 5], cursor: 8, right: [2, 1]}, 5)
       true
 
       iex> Enum.member?(ZipperList.empty, "potato")
@@ -35,11 +35,11 @@ defimpl Enumerable, for: ZipperList do
 
   ## Examples
 
-      iex> z = %ZipperList{left: [2, 1], right: [4, 5], cursor: 3}
+      iex> z = %ZipperList{left: [2, 1], cursor: 3, right: [4, 5]}
       iex> Enumerable.reduce(z, {:cont, 0}, fn(z, acc) ->
       ...>   {:cont, z.cursor + acc}
       ...>end)
-      15
+      {:done, 12}
   """
   def reduce(%ZipperList{cursor: nil, right: []}, {:cont, acc}, _fun) do
     {:done, acc}

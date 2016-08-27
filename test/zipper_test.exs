@@ -1,6 +1,7 @@
 defmodule ZipperListTest do
   use ExUnit.Case
   doctest ZipperList
+  doctest Enumerable.ZipperList
 
   describe "count" do
     test "returns 0 for empty zippers" do
@@ -53,6 +54,11 @@ defmodule ZipperListTest do
       end)
 
       assert {:done, 9} == result
+    end
+
+    test "it only reads from the cursor position" do
+      zs = ZipperList.from_lists([1, 2, 3], [4, 5])
+      refute Enum.find(zs, &(&1.cursor == 2))
     end
 
     test "it handles :suspend" do

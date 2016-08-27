@@ -55,6 +55,8 @@ iex> zip.right
 [5, 6]
 ```
 
+### Navigation
+
 You can pass along a ZipperList to `Zipper.right/1` and `Zipper.left/1` to
 traverse the list (in constant time). Movements can be chained to repeat
 navigation:
@@ -66,6 +68,8 @@ iex> zip |> ZipperList.right
 iex> zip |> ZipperList.left |> ZipperList.left
 %ZipperList{left: [], cursor: 1, right: [2, 3, 4, 5, 6]}
 ```
+
+### Enumeration
 
 You can also use any `Enum` method as usual. Be aware that it will enumerate
 starting at the cursor and go to the right.
