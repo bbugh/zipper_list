@@ -1,9 +1,9 @@
-defmodule Zipper.Mixfile do
+defmodule ZipperList.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :zipper,
-     version: "1.0.0-beta1",
+    [app: :zipper_list,
+     version: "0.9.0-beta2",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -25,17 +25,19 @@ defmodule Zipper.Mixfile do
       description: description(),
       maintainers: ["Brian Bugh"],
       licenses: ["MIT License"],
-      links: %{"GitHub" => "https://github.com/bbugh/elixir-zipper"}
+      links: %{"GitHub" => "https://github.com/bbugh/zipper_list"}
     ]
   end
 
   defp description do
     """
-    A Haskell-inspired implementation of a Zipper list.
+    A Haskell-inspired implementation of a zipper list data structure.
 
-    Uses a flat 2D structure with a cursor node and left/right traversal.
+    Uses a flat 2D List structure with a cursor node and left/right O(1)
+    traversal.
 
-    For more information on Zipper trees, visit [Zipper_(data_structure)](https://en.wikipedia.org/wiki/Zipper_\(data_structure\))
+    For more information on zippers, visit
+    [Zipper_(data_structure)](https://en.wikipedia.org/wiki/ZipperList_\(data_structure\))
     """
   end
 
@@ -55,6 +57,7 @@ defmodule Zipper.Mixfile do
   defp deps do
     [
       {:credo, "~> 0.4", only: [:dev, :test]},
+      {:ex_guard, "~> 1.1.1", only: :dev},
       {:ex_doc, "~> 0.12", only: :dev}
     ]
   end

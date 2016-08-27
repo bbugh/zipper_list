@@ -1,8 +1,8 @@
 # Readme
 
-`zipper` is a library that implements a flat [Zipper data structure](https://en.wikipedia.org/wiki/Zipper_\(data_structure\)).
+`zipper` is a library that implements a flat [ZipperList data structure](https://en.wikipedia.org/wiki/ZipperList_\(data_structure\)).
 
-Note: If you're looking for a Zipper Tree, check out [this one](https://github.com/Dkendal/zipper_tree).
+Note: If you're looking for a ZipperList Tree, check out [this one](https://github.com/Dkendal/zipper_tree).
 
 ## Installation
 
