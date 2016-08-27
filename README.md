@@ -1,5 +1,7 @@
 # Zipper List Library for Elixir
 
+[![Build Status](https://travis-ci.org/bbugh/zipper_list.svg?branch=master)](https://travis-ci.org/bbugh/zipper_list)
+
 [`zipper_list`](https://github.com/bbugh/zipper_list) is a library that
 implements a flat [Zipper data
 structure](https://en.wikipedia.org/wiki/Zipper_\(data_structure\)).
