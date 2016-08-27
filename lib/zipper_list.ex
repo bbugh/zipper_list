@@ -197,8 +197,8 @@ defmodule ZipperList do
       %ZipperList{left: [5, 4, 3, 2, 1], cursor: nil, right: []}
   """
   @spec cursor_end(ZipperList.t) :: ZipperList.t
-  def cursor_end(z = %ZipperList{right: []}), do: z
   def cursor_end(z = %ZipperList{left: [], right: []}), do: z
+  def cursor_end(z = %ZipperList{right: []}), do: z
   def cursor_end(z = %ZipperList{}) do
     %ZipperList{cursor: nil, left: Enum.reverse(z.right) ++ [z.cursor | z.left]}
    end

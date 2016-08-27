@@ -3,6 +3,38 @@ defmodule ZipperListTest do
   doctest ZipperList
   doctest Enumerable.ZipperList
 
+  describe "cursor_start" do
+    test "when nothing on the left or right, it returns the zipper" do
+      zs = %ZipperList{left: [], cursor: 8, right: []}
+      assert zs == ZipperList.cursor_start(zs)
+
+      zs = %ZipperList{left: [], cursor: nil, right: []}
+      assert zs == ZipperList.cursor_start(zs)
+    end
+  end
+
+  describe "cursor_end" do
+    test "when nothing on the right, it returns the zipper" do
+      zs = %ZipperList{left: [3, 2, 1], cursor: 4, right: []}
+      assert zs == ZipperList.cursor_end(zs)
+    end
+
+    test "when nothing on the left or right, it returns the zipper" do
+      zs = %ZipperList{left: [], cursor: 8, right: []}
+      assert zs == ZipperList.cursor_end(zs)
+    end
+
+    test "when the zipper is empty, it returns2" do
+      zs = %ZipperList{left: [], right: []}
+      assert zs == ZipperList.cursor_end(zs)
+    end
+
+    test "when the zipper is empty, it returns" do
+      zs = %ZipperList{left: [], cursor: nil, right: []}
+      assert zs == ZipperList.cursor_end(zs)
+    end
+  end
+
   describe "count" do
     test "returns 0 for empty zippers" do
       assert 0 == ZipperList.count(ZipperList.empty)
