@@ -1,6 +1,8 @@
 # Zipper List Library for Elixir
 
-`zipper_list` is a library that implements a flat [Zipper data structure](https://en.wikipedia.org/wiki/Zipper_\(data_structure\)).
+[`zipper_list`](https://github.com/bbugh/zipper_list) is a library that
+implements a flat [Zipper data
+structure](https://en.wikipedia.org/wiki/Zipper_\(data_structure\)).
 
 A zipper list allows for rapid left and right traversal on a list in constant
 time O(1). Useful for cases where a simple enumeration won't work. If you have
