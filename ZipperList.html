@@ -1,0 +1,1056 @@
+    <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.13.0">
+    <title>ZipperList – zipper_list v0.9.0-beta3</title>
+    <link rel="stylesheet" href="dist/app-9c1e3d5aa2.css" />
+    
+    <script src="dist/sidebar_items.js"></script>
+  </head>
+  <body data-type="modules">
+    <script>if(localStorage.getItem('night-mode')) document.body.className += ' night-mode';</script>
+
+    <div class="main">
+<button class="sidebar-toggle">
+  <i class="icon-menu"></i>
+</button>
+<section class="sidebar">
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        zipper_list
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.9.0-beta3
+      </h2>
+    </div>
+    
+  </a>
+
+  <div class="sidebar-search">
+    <i class="icon-search"></i>
+    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+
+  <ul id="full-list" class="sidebar-fullList"></ul>
+  <div class="sidebar-noResults"></div>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">zipper_list v0.9.0-beta3</small>
+        ZipperList
+        
+        
+          <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L1" title="View Source" class="view-source" rel="help">
+            <i class="icon-code"></i>
+          </a>
+        
+      </h1>
+
+      
+        <section id="moduledoc" class="docstring">
+          <p>A Haskell-inspired zipper list implementation.</p>
+<p>A <a href="ZipperList.html#content"><code class="inline">ZipperList</code></a> allows for rapid left and right traversal on a list in constant
+time. Useful for cases where a simple enumeration won’t work. If you have to
+use <a href="http://elixir-lang.org/docs/stable/elixir/Enum.html#at/3"><code class="inline">Enum.at/2</code></a>
+repeatedly, consider using <a href="ZipperList.html#content"><code class="inline">ZipperList</code></a> instead.</p>
+<h2 id="module-usage" class="section-heading">
+  <a href="#module-usage" class="hover-link"><i class="icon-link"></i></a>
+  Usage
+</h2>
+
+<p>The value at the current position is stored in <code class="inline">%ZipperList{cursor}</code>, and the
+items to the left and write are in <code class="inline">%ZipperList{left}</code> and
+<code class="inline">%ZipperList{right}</code> like:</p>
+<pre><code class="iex elixir">iex&gt; zip = %ZipperList{left: [3, 2, 1], cursor: 4, right: [5, 6]}
+iex&gt; zip |&gt; ZipperList.right
+%ZipperList{left: [4, 3, 2, 1], cursor: 5, right: [6]}
+iex&gt; zip |&gt; ZipperList.left |&gt; ZipperList.left
+%ZipperList{left: [1], cursor: 2, right: [3, 4, 5, 6]}</code></pre>
+<h2 id="module-using-with-enum" class="section-heading">
+  <a href="#module-using-with-enum" class="hover-link"><i class="icon-link"></i></a>
+  Using with Enum
+</h2>
+
+<p><a href="ZipperList.html#content"><code class="inline">ZipperList</code></a> implements the <code class="inline">Enumerable</code> protocol, so all <code class="inline">Enum</code> methods will
+work with <a href="ZipperList.html#content"><code class="inline">ZipperList</code></a>. However, <strong>all functions start enumerating at the
+cursor position</strong>. If you need to enumerate the whole zipper, use
+<a href="ZipperList.html#cursor_start/1"><code class="inline">ZipperList.cursor_start/1</code></a> to reset it.</p>
+<pre><code class="iex elixir">iex&gt; zip = ZipperList.from_lists([1, 2, 3], [4, 5, 6])
+iex&gt; Enum.map(zip, fn(z) -&gt; z.cursor * 3 end)
+[12, 15, 18]
+
+iex&gt; zip = ZipperList.from_lists([1, 2, 3], [4, 5, 6])
+iex&gt; Enum.map(ZipperList.cursor_start(zip), fn(z) -&gt; z.cursor * 3 end)
+[3, 6, 9, 12, 15, 18]</code></pre>
+<h2 id="module-accessing-data-in-the-zipper" class="section-heading">
+  <a href="#module-accessing-data-in-the-zipper" class="hover-link"><i class="icon-link"></i></a>
+  Accessing data in the zipper
+</h2>
+
+<p>If you choose to directly access <code class="inline">%ZipperList{left}</code> keep in mind that it is
+stored in reverse:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.from_lists([1, 2, 3], [4, 5, 6])
+%ZipperList{left: [3, 2, 1], cursor: 4, right: [5, 6]}
+
+iex&gt; ZipperList.to_list(%ZipperList{left: [3, 2, 1], cursor: 4, right: [5, 6]})
+[1, 2, 3, 4, 5, 6]</code></pre>
+<h2 id="module-reference" class="section-heading">
+  <a href="#module-reference" class="hover-link"><i class="icon-link"></i></a>
+  Reference
+</h2>
+
+<p>See the Wikipidia article “<a href="https://en.wikipedia.org/wiki/ZipperList_(data_structure)">Zipper_data
+structure</a>” for
+more (mathematically complicated) information.</p>
+
+        </section>
+      
+
+      
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <i class="icon-link"></i>
+            </a>
+            Summary
+          </h1>
+          
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:t/0">t()</a>
+  </div>
+  
+</div>
+
+  </div>
+
+
+          
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#beginning?/1">beginning?(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the zipper is at the start</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#count/1">count(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the count of the number of elements in the zipper, including the
+cursor</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#cursor_end/1">cursor_end(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the zipper with the cursor set to the end. <code class="inline">cursor</code> will be nil. O(1)</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#cursor_start/1">cursor_start(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the zipper with the cursor set to the start. O(1)</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#delete/1">delete(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Drops the value in the cursor and replaces it with the next value from the
+right</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#empty/0">empty()</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns an empty ZipperList with the cursor position at the front</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#empty?/1">empty?(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the zipper is empty</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#end?/1">end?(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the zipper is at the end</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#from_list/1">from_list(list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns a zipper containing the elements of <code class="inline">xs</code>, with the cursor at the first
+element</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#from_list_end/1">from_list_end(xs)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns a zipper containing the elements of <code class="inline">xs</code>, focused just off the right
+end of the list</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#from_lists/2">from_lists(left, list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns a new ZipperList with the cursor from <code class="inline">ZipperList.right</code>’s first
+element</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#insert/2">insert(zipper_list, value)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Inserts <code class="inline">value</code> at the cursor position, pushing the current cursor and all
+values to the right</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#left/1">left(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the zipper with the cursor focus shifted one element to the left, or
+<code class="inline">zipper</code> if the cursor is already at the beginning</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#pop/1">pop(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Pops a value off of the position before the cursor. If there are no values to
+the left of the cursor, it returns <code class="inline">zipper</code></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#push/2">push(zipper_list, value)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Pushes a value into the position before the cursor, leaving the cursor
+unchanged</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#replace/2">replace(zipper_list, value)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Replaces the zipper’s cursor with the passed in <code class="inline">value</code>. If there is no
+current cursor, the value becomes the new cursor</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#reverse/1">reverse(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the zipper with the elements in the reverse order. O(1)</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#right/1">right(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns the zipper with the cursor focus shifted one element to the right, or
+returns <code class="inline">zipper</code> if the cursor is past the end</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#to_list/1">to_list(zipper_list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns a list from the zipper</p>
+</div>
+  
+</div>
+
+  </div>
+
+
+          
+
+          
+
+        </section>
+      
+
+      
+        <section id="types" class="types details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <i class="icon-link"></i>
+            </a>
+            Types
+          </h1>
+          <div class="types-list">
+            <div id="t:t/0" class="type-detail">
+  <pre><code class="elixir"><a href="#t:t/0">t</a> :: %ZipperList{cursor: any, left: list, right: list}</code></pre>
+  
+</div>
+
+          </div>
+        </section>
+      
+
+      
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <i class="icon-link"></i>
+            </a>
+            Functions
+          </h1>
+          <div class="detail" id="beginning?/1">
+  <div class="detail-header">
+    <a href="#beginning?/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">beginning?(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L139" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">beginning?(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: boolean</code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns <code class="inline">true</code> if the zipper is at the start.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.beginning?(%ZipperList{left: [], cursor: 0, right: [1, 2, 3]})
+true
+
+iex&gt; ZipperList.beginning?(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
+false</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="count/1">
+  <div class="detail-header">
+    <a href="#count/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">count(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L401" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">count(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: integer</code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the count of the number of elements in the zipper, including the
+cursor.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.count(%ZipperList{left: [2, 1], cursor: 3, right: [4, 5]})
+5</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="cursor_end/1">
+  <div class="detail-header">
+    <a href="#cursor_end/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">cursor_end(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L200" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">cursor_end(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the zipper with the cursor set to the end. <code class="inline">cursor</code> will be nil. O(1)</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.cursor_end(%ZipperList{left: [2, 1], cursor: 3, right: [4, 5]})
+%ZipperList{left: [5, 4, 3, 2, 1], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="cursor_start/1">
+  <div class="detail-header">
+    <a href="#cursor_start/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">cursor_start(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L184" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">cursor_start(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the zipper with the cursor set to the start. O(1)</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.cursor_start(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
+%ZipperList{left: [], cursor: 1, right: [2, 3, 4]}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="delete/1">
+  <div class="detail-header">
+    <a href="#delete/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">delete(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L307" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">delete(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Drops the value in the cursor and replaces it with the next value from the
+right.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.delete(%ZipperList{left: [3], cursor: 4, right: [5, 2]})
+%ZipperList{left: [3], cursor: 5, right: [2]}
+
+iex&gt; ZipperList.delete(ZipperList.empty)
+%ZipperList{left: [], cursor: nil, right: []}</code></pre>
+<p>If there is no value to the right, <code class="inline">cursor</code> will be <code class="inline">nil</code>:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.delete(%ZipperList{left: [2, 5, 3], cursor: 8, right: []})
+%ZipperList{left: [2, 5, 3], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="empty/0">
+  <div class="detail-header">
+    <a href="#empty/0" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">empty()</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L67" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">empty :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns an empty ZipperList with the cursor position at the front.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.empty
+%ZipperList{left: [], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="empty?/1">
+  <div class="detail-header">
+    <a href="#empty?/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">empty?(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L171" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">empty?(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: boolean</code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns <code class="inline">true</code> if the zipper is empty.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.empty?(ZipperList.empty)
+true
+
+iex&gt; ZipperList.empty?(%ZipperList{left: [3, 2, 1], cursor: 4})
+false</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="end?/1">
+  <div class="detail-header">
+    <a href="#end?/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">end?(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L155" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">end?(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: boolean</code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns <code class="inline">true</code> if the zipper is at the end.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.end?(%ZipperList{left: [3, 2, 1], cursor: nil, right: []})
+true
+
+iex&gt; ZipperList.end?(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
+false</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="from_list/1">
+  <div class="detail-header">
+    <a href="#from_list/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">from_list(list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L95" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">from_list(list) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns a zipper containing the elements of <code class="inline">xs</code>, with the cursor at the first
+element.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.from_list([1, 2, 3])
+%ZipperList{left: [], cursor: 1, right: [2, 3]}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="from_list_end/1">
+  <div class="detail-header">
+    <a href="#from_list_end/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">from_list_end(xs)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L110" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">from_list_end(list) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns a zipper containing the elements of <code class="inline">xs</code>, focused just off the right
+end of the list.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; zip = ZipperList.from_list_end([1, 2, 3])
+%ZipperList{left: [3, 2, 1], cursor: nil, right: []}
+iex&gt; ZipperList.end? zip
+true</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="from_lists/2">
+  <div class="detail-header">
+    <a href="#from_lists/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">from_lists(left, list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L80" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">from_lists(list, list) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns a new ZipperList with the cursor from <code class="inline">ZipperList.right</code>’s first
+element.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.from_lists([1, 2, 3], [4, 5])
+%ZipperList{left: [3, 2, 1], cursor: 4, right: [5]}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="insert/2">
+  <div class="detail-header">
+    <a href="#insert/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">insert(zipper_list, value)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L283" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">insert(<a href="ZipperList.html#t:t/0">ZipperList.t</a>, any) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Inserts <code class="inline">value</code> at the cursor position, pushing the current cursor and all
+values to the right.</p>
+<h2>Examples</h2>
+<p>Inserting a value replaces the cursor:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.insert(%ZipperList{left: [1], cursor: 2, right: [3]}, 5)
+%ZipperList{left: [1], cursor: 5, right: [2, 3]}</code></pre>
+<p>On empty zippers, it inserts at the cursor position:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.insert(ZipperList.empty, 5)
+%ZipperList{left: [], cursor: 5, right: []}</code></pre>
+<p>Any values are pushed to the right:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.insert(%ZipperList{left: [], cursor: 5, right: []}, 10)
+%ZipperList{left: [], cursor: 10, right: [5]}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="left/1">
+  <div class="detail-header">
+    <a href="#left/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">left(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L222" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">left(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the zipper with the cursor focus shifted one element to the left, or
+<code class="inline">zipper</code> if the cursor is already at the beginning.</p>
+<p>Use <code class="inline">ZipperList.begin?</code> to check if the zipper is at the beginning.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.left(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
+%ZipperList{left: [1], cursor: 2, right: [3, 4]}
+
+iex&gt; ZipperList.left(%ZipperList{left: [], cursor: 1, right: [2, 3]})
+%ZipperList{left: [], cursor: 1, right: [2, 3]}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="pop/1">
+  <div class="detail-header">
+    <a href="#pop/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">pop(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L346" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">pop(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Pops a value off of the position before the cursor. If there are no values to
+the left of the cursor, it returns <code class="inline">zipper</code>.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.pop(%ZipperList{left: [1], cursor: 2, right: [3, 4]})
+%ZipperList{left: [], cursor: 2, right: [3, 4]}
+
+iex&gt; ZipperList.pop(ZipperList.empty)
+%ZipperList{left: [], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="push/2">
+  <div class="detail-header">
+    <a href="#push/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">push(zipper_list, value)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L328" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">push(<a href="ZipperList.html#t:t/0">ZipperList.t</a>, any) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Pushes a value into the position before the cursor, leaving the cursor
+unchanged.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.push(%ZipperList{left: [1], cursor: 2, right: [3, 4]}, 5)
+%ZipperList{left: [5, 1], cursor: 2, right: [3, 4]}
+iex&gt; ZipperList.push(ZipperList.empty, 5)
+%ZipperList{left: [5], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="replace/2">
+  <div class="detail-header">
+    <a href="#replace/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">replace(zipper_list, value)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L365" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">replace(<a href="ZipperList.html#t:t/0">ZipperList.t</a>, any) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Replaces the zipper’s cursor with the passed in <code class="inline">value</code>. If there is no
+current cursor, the value becomes the new cursor.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.replace(%ZipperList{left: [1], cursor: 2, right: [3, 4]}, 5)
+%ZipperList{left: [1], cursor: 5, right: [3, 4]}
+
+iex&gt; ZipperList.replace(ZipperList.empty, 5)
+%ZipperList{left: [], cursor: 5, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="reverse/1">
+  <div class="detail-header">
+    <a href="#reverse/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">reverse(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L386" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">reverse(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the zipper with the elements in the reverse order. O(1).</p>
+<p>The cursor “position” is shifted, but the value does not change. If the cursor
+was at the start, it’s now at the end, and if it was at the end, it’s now at
+the start.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.reverse(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
+%ZipperList{left: [4], cursor: 3, right: [2, 1]}
+
+iex&gt; ZipperList.reverse(%ZipperList{left: [], cursor: 1, right: [2, 3, 4]})
+%ZipperList{left: [2, 3, 4], cursor: 1, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="right/1">
+  <div class="detail-header">
+    <a href="#right/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">right(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L252" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">right(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: <a href="ZipperList.html#t:t/0">ZipperList.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns the zipper with the cursor focus shifted one element to the right, or
+returns <code class="inline">zipper</code> if the cursor is past the end.</p>
+<p>Use <code class="inline">ZipperList.end?</code> to check if the zipper is at the end.</p>
+<h2>Examples</h2>
+<p>The cursor moves out of the <code class="inline">right</code> list:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.right(%ZipperList{left: [2, 1], cursor: 3, right: [4, 5]})
+%ZipperList{left: [3, 2, 1], cursor: 4, right: [5]}</code></pre>
+<p>If it is on the last item, <code class="inline">cursor</code> will be <code class="inline">nil</code>.</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.right(%ZipperList{left: [3, 2, 1], cursor: 4, right: []})
+%ZipperList{left: [4, 3, 2, 1], cursor: nil, right: []}</code></pre>
+<p>If the cursor is at the end, <code class="inline">right</code> returns the zipper:</p>
+<pre><code class="iex elixir">iex&gt; ZipperList.right(%ZipperList{left: [4, 3, 2, 1], cursor: nil, right: []})
+%ZipperList{left: [4, 3, 2, 1], cursor: nil, right: []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="to_list/1">
+  <div class="detail-header">
+    <a href="#to_list/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">to_list(zipper_list)</span>
+    
+      <a href="https://github.com/bbugh/zipper_list/blob/master/lib/zipper_list.ex#L122" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">to_list(<a href="ZipperList.html#t:t/0">ZipperList.t</a>) :: list</code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Returns a list from the zipper.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; ZipperList.to_list(%ZipperList{left: [3,2,1], cursor: 4, right: [5,6]})
+[1, 2, 3, 4, 5, 6]</code></pre>
+
+  </section>
+</div>
+
+        </section>
+      
+
+      
+
+      
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.13.0),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  <script src="dist/app-21f1a20b9e.js"></script>
+  </body>
+</html>
+
