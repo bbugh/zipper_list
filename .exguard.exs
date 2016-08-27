@@ -12,5 +12,5 @@ guard("analysis")
 
 guard("documentation", run_on_start: true)
 |> command("mix docs")
-|> watch(~r{\.(ex|exs)\z}i)
+|> watch(~r{\.(ex|exs|md)\z}i)
 |> notification(:auto)

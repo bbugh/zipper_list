@@ -3,13 +3,14 @@ defmodule ZipperList.Mixfile do
 
   def project do
     [app: :zipper_list,
-     version: "0.9.0-beta2",
+     version: "0.9.0-beta3",
      elixir: "~> 1.3",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
      docs: [extras: docs()],
-     package: package,
+     package: package(),
      deps: deps(),
+     description: description(),
+     homepage_url: "https://github.com/bbugh/zipper_list",
+     source_url: "https://github.com/bbugh/zipper_list",
      default_task: "test"]
   end
 
@@ -17,7 +18,7 @@ defmodule ZipperList.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: []]
   end
 
   defp package do
@@ -42,7 +43,7 @@ defmodule ZipperList.Mixfile do
   end
 
   defp docs do
-    ["README.md"]
+    ["README.md": [title: "Readme"]]
   end
 
   # Dependencies can be Hex packages:
