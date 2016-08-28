@@ -3,7 +3,7 @@ defmodule ZipperList.Mixfile do
 
   def project do
     [app: :zipper_list,
-     version: "0.9.0-beta3",
+     version: "0.10.0-beta4",
      elixir: "~> 1.3",
      docs: [extras: docs()],
      package: package(),

@@ -201,7 +201,25 @@ defmodule ZipperList do
   def cursor_end(z = %ZipperList{right: []}), do: z
   def cursor_end(z = %ZipperList{}) do
     %ZipperList{cursor: nil, left: Enum.reverse(z.right) ++ [z.cursor | z.left]}
-   end
+  end
+
+
+  @doc """
+  Returns the cursor or returns the default option if the cursor is nil.
+
+  ## Examples
+
+      iex> ZipperList.safe_cursor(ZipperList.empty, 5)
+      %ZipperList{left: [], cursor: 5, right: []}
+
+      iex> ZipperList.safe_cursor(%ZipperList{cursor: 10}, 5)
+      %ZipperList{cursor: 10}
+  """
+  @spec safe_cursor(ZipperList.t, any()) :: ZipperList.t
+  def safe_cursor(z = %ZipperList{cursor: nil}, default) do
+    %{z | cursor: default}
+  end
+  def safe_cursor(z = %ZipperList{}, _default), do: z
 
 
   @doc """
