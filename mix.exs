@@ -3,7 +3,7 @@ defmodule ZipperList.Mixfile do
 
   def project do
     [app: :zipper_list,
-     version: "0.10.0-beta4",
+     version: "1.0.0",
      elixir: "~> 1.3",
      docs: [extras: docs()],
      package: package(),
@@ -29,19 +29,14 @@ defmodule ZipperList.Mixfile do
       description: description(),
       maintainers: ["Brian Bugh"],
       licenses: ["MIT License"],
-      links: %{"GitHub" => "https://github.com/bbugh/zipper_list"}
+      links: %{"GitHub" => "https://github.com/bbugh/zipper_list",
+               "Documentation" => "https://bbugh.github.com/zipper_list"}
     ]
   end
 
   defp description do
     """
-    A Haskell-inspired implementation of a zipper list data structure.
-
-    Uses a flat 2D List structure with a cursor node and left/right O(1)
-    traversal.
-
-    For more information on zippers, visit
-    [Zipper_(data_structure)](https://en.wikipedia.org/wiki/ZipperList_\(data_structure\))
+    Elixir implementation of a zipper for List.
     """
   end
 
