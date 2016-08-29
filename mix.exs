@@ -29,8 +29,7 @@ defmodule ZipperList.Mixfile do
       description: description(),
       maintainers: ["Brian Bugh"],
       licenses: ["MIT License"],
-      links: %{"GitHub" => "https://github.com/bbugh/zipper_list",
-               "Documentation" => "https://bbugh.github.com/zipper_list"}
+      links: %{"GitHub" => "https://github.com/bbugh/zipper_list"}
     ]
   end
 

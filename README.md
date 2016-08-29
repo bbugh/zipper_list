@@ -90,7 +90,8 @@ iex> zip |> Zipper.cursor_start |> Enum.find(fn(z) -> z.cursor == 2 end)
 
 Awesome, huh?
 
-Check the API docs for `ZipperList` for all the details.
+Check [the `ZipperList` API docs](https://hexdocs.pm/zipper_list/) for all the
+details.
 
 ## Contributing
 
