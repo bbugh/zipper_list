@@ -3,9 +3,9 @@ defmodule ZipperList.Mixfile do
 
   def project do
     [app: :zipper_list,
-     version: "1.1.0",
+     version: "1.1.1",
      elixir: "~> 1.3",
-     docs: [extras: docs(), main: "Readme"],
+     docs: [extras: docs(), main: "readme"],
      package: package(),
      deps: deps(),
      description: description(),

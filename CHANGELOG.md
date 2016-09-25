@@ -2,7 +2,7 @@
 
 ZipperList adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.1.0] - 2016-09-25
+## [1.1.1] - 2016-09-25
 ### Added
 - Implementation of `Collectable.into` for list comprehensions and `Enum.into`
 
