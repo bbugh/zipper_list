@@ -5,7 +5,7 @@ defmodule ZipperList.Mixfile do
     [app: :zipper_list,
      version: "1.1.0",
      elixir: "~> 1.3",
-     docs: [extras: docs()],
+     docs: [extras: docs(), main: "Readme"],
      package: package(),
      deps: deps(),
      description: description(),
@@ -40,7 +40,8 @@ defmodule ZipperList.Mixfile do
   end
 
   defp docs do
-    ["README.md": [title: "Readme"]]
+    ["README.md": [title: "Readme"],
+     "CHANGELOG.md": [title: "Changelog"]]
   end
 
   # Dependencies can be Hex packages:

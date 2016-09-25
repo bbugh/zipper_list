@@ -1,5 +1,5 @@
 # Zipper List Library for Elixir
-[![Build Status](https://travis-ci.org/bbugh/zipper_list.svg?branch=master)](https://travis-ci.org/bbugh/zipper_list) [![Coverage Status](https://coveralls.io/repos/github/bbugh/zipper_list/badge.svg?branch=master)](https://coveralls.io/github/bbugh/zipper_list?branch=master)
+[![Hex Version](https://img.shields.io/badge/hex-v1.1.0-blue.svg)](https://hex.pm/packages/zipper_list/1.1.0) [![Build Status](https://travis-ci.org/bbugh/zipper_list.svg?branch=master)](https://travis-ci.org/bbugh/zipper_list) [![Coverage Status](https://coveralls.io/repos/github/bbugh/zipper_list/badge.svg?branch=master)](https://coveralls.io/github/bbugh/zipper_list?branch=master) [![license](https://img.shields.io/github/license/bbugh/zipper_list.svg?maxAge=2592000)](https://github.com/bbugh/zipper_list/blob/master/LICENSE.md)
 
 [`zipper_list`](https://github.com/bbugh/zipper_list) is a library that
 implements a flat [Zipper data
