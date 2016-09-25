@@ -2,6 +2,7 @@ defmodule ZipperListTest do
   use ExUnit.Case
   doctest ZipperList
   doctest Enumerable.ZipperList
+  import ExUnit.CaptureIO
 
   describe "cursor_start" do
     test "when nothing on the left or right, it returns the zipper" do
@@ -41,8 +42,28 @@ defmodule ZipperListTest do
     end
 
     test "returns correctly at end of zipper" do
-      zs = %ZipperList{left: [5, 4, 3, 2, 1], right: [], cursor: nil}
+      zs = %ZipperList{left: [5, 4, 3, 2, 1], cursor: nil, right: []}
       assert 5 == ZipperList.count(zs)
+    end
+  end
+
+  describe "left" do
+    test "when at end of list, doesn't add nil to right" do
+      zs = %ZipperList{left: [3, 2, 1], cursor: nil, right: []}
+      expected = %ZipperList{left: [2, 1], cursor: 3, right: []}
+      assert expected == ZipperList.left(zs)
+    end
+
+    test "only trims nil when it's at the end" do
+      zs = %ZipperList{left: [3, nil, 2, 1], cursor: nil, right: [3]}
+      expected = %ZipperList{left: [nil, 2, 1], cursor: 3, right: [nil, 3]}
+      assert expected == ZipperList.left(zs)
+    end
+
+    test "trims nils each time with contrived nil ZipperList" do
+      zs = %ZipperList{left: [nil, nil], cursor: nil, right: []}
+      expected = ZipperList.empty
+      assert expected == zs |> ZipperList.left |> ZipperList.left
     end
   end
 
@@ -125,6 +146,26 @@ defmodule ZipperListTest do
       zs = ZipperList.from_lists([1], [2, 3, 4, 5])
       result = Enum.find(zs, &(&1.cursor == 4))
       assert result == %ZipperList{left: [3, 2, 1], right: [5], cursor: 4}
+    end
+  end
+
+  describe "Inspect.inspect protocol" do
+    test "prints :left before :cursor" do
+      zs = %ZipperList{left: [3, 2, 1], cursor: nil, right: []}
+      assert "%ZipperList{left: [3, 2, 1], cursor: nil, right: []}\n"
+        == capture_io(fn -> IO.inspect(zs) end)
+    end
+  end
+
+  describe "Collectable.into protocol" do
+    test "creates zipperlist with list comprehension" do
+      z = for x <- [1, 2, 3], into: ZipperList.empty, do: x * 2
+      assert z == %ZipperList{left: [6, 4, 2], cursor: nil, right: []}
+    end
+
+    test "Enum.into works" do
+      assert Enum.into([1, 2, 3], ZipperList.empty)
+        == %ZipperList{left: [3, 2, 1], cursor: nil, right: []}
     end
   end
 end

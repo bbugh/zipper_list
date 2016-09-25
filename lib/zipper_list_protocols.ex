@@ -1,3 +1,29 @@
+defimpl Inspect, for: ZipperList do
+  # Inspect sorts the keys alphabetically, but we want to represent it
+  # in human sensible order
+  def inspect(zipper, opts) do
+    import Inspect.Algebra
+
+    concat ["%ZipperList{left: ", to_doc(zipper.left, opts),
+            ", cursor: ", to_doc(zipper.cursor, opts),
+            ", right: ", to_doc(zipper.right, opts),
+            "}"]
+  end
+end
+
+defimpl Collectable, for: ZipperList do
+  def into(zipper) do
+    {zipper, &into/2}
+  end
+
+  defp into(zipper, {:cont, item}) do
+    ZipperList.push(zipper, item)
+  end
+
+  defp into(zipper, :done), do: zipper
+  defp into(_zipper, :halt), do: :ok
+end
+
 defimpl Enumerable, for: ZipperList do
   @doc """
   Returns the count of the items in the zipper, including the cursor position.

@@ -228,6 +228,8 @@ defmodule ZipperList do
 
   Use `ZipperList.begin?` to check if the zipper is at the beginning.
 
+  Note: Moving left will trim `nil` if `right` is empty.
+
   ## Examples
 
       iex> ZipperList.left(%ZipperList{left: [2, 1], cursor: 3, right: [4]})
@@ -238,6 +240,9 @@ defmodule ZipperList do
   """
   @spec left(ZipperList.t) :: ZipperList.t
   def left(z = %ZipperList{left: []}), do: z
+  def left(%ZipperList{left: [head | tail], cursor: nil, right: []}) do
+    %ZipperList{cursor: head, left: tail, right: []}
+  end
   def left(z = %ZipperList{left: [head | tail]}) do
     %ZipperList{cursor: head, left: tail, right: [z.cursor | z.right]}
   end
