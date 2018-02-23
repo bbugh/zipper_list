@@ -21,13 +21,13 @@ one by Dkendal](https://github.com/Dkendal/zipper_tree).
 
   1. Add `zipper_list` to your list of dependencies in `mix.exs`:
 
-    ```elixir
+  ```elixir
 def deps do
   [
     {:zipper_list, "~> 1.0.0"}
   ]
 end
-```
+  ```
 
   2. Run `mix deps.get`
 
